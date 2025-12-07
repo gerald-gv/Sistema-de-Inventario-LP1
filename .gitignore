@@ -1,0 +1,5 @@
+# Carpeta generada automáticamente
+build/
+
+# Configuración local del servidor
+Servers/
