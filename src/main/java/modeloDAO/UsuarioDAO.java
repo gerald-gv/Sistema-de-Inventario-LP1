@@ -9,7 +9,9 @@ public class UsuarioDAO {
 	public Usuario validar(String email, String password) {
         Usuario usuario = new Usuario();
         
-        String sql = "SELECT u.*, r.nombre AS nombreRol FROM usuarios u JOIN rol r ON u.id_rol = r.id_rol WHERE u.user_email=? AND u.password=?";
+        String sql = "SELECT u.id_usuario, u.user_email, u.username, u.password, r.id_rol, r.nombre AS nombreRol "
+                   + "FROM usuarios u JOIN roles r ON u.id_rol = r.id_rol "
+                   + "WHERE u.user_email=? AND u.password=?";
         
         Connection con = null;
         PreparedStatement ps = null;
@@ -25,7 +27,7 @@ public class UsuarioDAO {
             rs = ps.executeQuery();
             
             if (rs.next()) {
-                usuario.setId(rs.getInt("id"));
+                usuario.setId(rs.getInt("id_usuario")); 
                 usuario.setUserEmail(rs.getString("user_email"));
                 usuario.setUsername(rs.getString("username"));
                 usuario.setPassword(rs.getString("password"));
@@ -34,10 +36,12 @@ public class UsuarioDAO {
                 rol.setIdRol(rs.getInt("id_rol")); 
                 rol.setNombre(rs.getString("nombreRol")); 
                 usuario.setRol(rol);
+            } else {
+                System.out.println("Consulta sql ejecutada, pero no se encontraron credenciales validas");
             }
             
         } catch (SQLException e) {
-            System.out.println("Error en la validación de credenciales: " + e.getMessage());
+            System.err.println("Error en la validación de credenciales de sql: " + e.getMessage());
             e.printStackTrace();
             
         } finally {
@@ -46,7 +50,7 @@ public class UsuarioDAO {
                 if (ps != null) ps.close();
                 if (con != null) con.close();
             } catch (SQLException e) {
-                System.out.println("Error al cerrar recursos: " + e.getMessage());
+                System.err.println("Error al cerrar recursos: " + e.getMessage());
             }
         }
 

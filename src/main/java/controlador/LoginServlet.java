@@ -10,45 +10,43 @@ import java.io.IOException;
 
 import modelo.Usuario;
 import modeloDAO.UsuarioDAO;
-
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     
     private UsuarioDAO dao = new UsuarioDAO(); 
 
-    public LoginServlet() {
-    }
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
         throws ServletException, IOException 
 	{
 		
-        String email = request.getParameter("email").trim(); 
-        String password = request.getParameter("contrasena").trim();
+        String email = request.getParameter("email");
+        String password = request.getParameter("contrasena");
+        
+        if (email == null) email = "";
+        if (password == null) password = "";
+        
+        email = email.trim(); 
+        password = password.trim(); 
         
         Usuario usuarioValidado = dao.validar(email, password);
         
-        if (usuarioValidado.getId() != 0) {
-            
+        if (usuarioValidado.getId() != 0) { 
             HttpSession session = request.getSession();
             session.setAttribute("usuarioLogueado", usuarioValidado);
             
             String rolNombre = usuarioValidado.getRol().getNombre();
             
-            if (rolNombre.equalsIgnoreCase("Administrador")) {
+            if (rolNombre.equalsIgnoreCase("admin")) {
                 response.sendRedirect("dashboard_admin.jsp");
-            } else if (rolNombre.equalsIgnoreCase("Empleado")) {
+            } else if (rolNombre.equalsIgnoreCase("empleado")) {
                 response.sendRedirect("dashboard_empleado.jsp");
             } else {
-                response.sendRedirect("login.jsp"); 
+                response.sendRedirect("home.jsp"); 
             }
             
         } else {
-            request.setAttribute("errorLogin", "Email o contraseña incorrectos");
+            request.setAttribute("errorLogin", "Email o contraseña incorrectos.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
 	}
@@ -58,5 +56,4 @@ public class LoginServlet extends HttpServlet {
     {
         response.sendRedirect("login.jsp");
     }
-
 }

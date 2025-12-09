@@ -2,7 +2,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     Usuario user = (Usuario) session.getAttribute("usuarioLogueado");
-    if (user == null || !user.getRol().getNombre().equalsIgnoreCase("Administrador")) {
+    if (user == null || !user.getRol().getNombre().equalsIgnoreCase("admin")) {
         response.sendRedirect("login.jsp");
         return;
     }
