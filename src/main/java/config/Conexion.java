@@ -7,9 +7,9 @@ import java.sql.SQLException;
 public class Conexion {
 	
 	private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
-	private static final String URL = "jdbc:mysql://localhost:3306/inventorysystem";
+	private static final String URL = "jdbc:mysql://localhost:3306/inventario";
 	private static final String USUARIO = "root";
-	private static final String PASSWORD = "tucontraseñalocal :)";
+	private static final String PASSWORD = "ramiro484";
 	
 	static {
 		
@@ -20,16 +20,14 @@ public class Conexion {
 		}
 	}
 	
-	
-	public Connection Conectar() {
+	public static Connection Conectar() {
 		
 		Connection cnx = null;
-		
 		
 		try {
 			cnx = DriverManager.getConnection(URL, USUARIO, PASSWORD);
 			System.out.println("Se ha conectado correctamente a la BD");
-		} catch (SQLException e) {
+		} catch (SQLException e) { 
 			System.out.println("Ha sucedio un error a la conexion: " + e);
 			e.printStackTrace();
 		}
