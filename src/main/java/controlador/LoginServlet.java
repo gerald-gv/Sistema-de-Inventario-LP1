@@ -31,19 +31,13 @@ public class LoginServlet extends HttpServlet {
         
         Usuario usuarioValidado = dao.validar(email, password);
         
-        if (usuarioValidado.getId() != 0) { 
+        if (usuarioValidado.getId() != 0) {
+        	
             HttpSession session = request.getSession();
             session.setAttribute("usuarioLogueado", usuarioValidado);
             
-            String rolNombre = usuarioValidado.getRol().getNombre();
-            
-            if (rolNombre.equalsIgnoreCase("admin")) {
-                response.sendRedirect("dashboard_admin.jsp");
-            } else if (rolNombre.equalsIgnoreCase("empleado")) {
-                response.sendRedirect("dashboard_empleado.jsp");
-            } else {
-                response.sendRedirect("home.jsp"); 
-            }
+            // Redirrecion al dashboard (Inicio)
+            response.sendRedirect("layout/dashboard.jsp?view=inicio");
             
         } else {
             request.setAttribute("errorLogin", "Email o contraseña incorrectos.");
