@@ -1,3 +1,4 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="modelo.Categoria"%>
 <%@page import="modeloDAO.CategoriaDAO"%>
@@ -46,7 +47,7 @@
 
                 <td class="py-2 px-4 text-center space-x-2">
 
-                    <!-- BOTÓN EDITAR -->
+                    <!-- BOTÃN EDITAR -->
                     <button 
                         onclick="abrirModalEditar(
                             '<%=c.getIdCategoria()%>',
@@ -57,9 +58,9 @@
                         Editar
                     </button>
 
-                    <!-- BOTÓN ELIMINAR -->
+                    <!-- BOTÃN ELIMINAR -->
                     <a href="${pageContext.request.contextPath}/ControladorCategoria?accion=eliminar&id=<%=c.getIdCategoria()%>"
-                       onclick="return confirm('¿Eliminar categoría?')"
+                       onclick="return confirm('Â¿Eliminar categorÃ­a?')"
                        class="text-red-600 hover:underline">
                         Eliminar
                     </a>
@@ -106,7 +107,7 @@
 
 <script>
     function abrirModalAgregar(){
-        document.getElementById("modalTitulo").innerText = "Agregar Categoría";
+        document.getElementById("modalTitulo").innerText = "Agregar CategorÃ­a";
         document.getElementById("accion").value = "guardar";
         document.getElementById("id").value = "";
         document.getElementById("formCategoria").reset();
@@ -114,7 +115,7 @@
     }
     
     function abrirModalEditar(id, nombre, descripcion){
-        document.getElementById("modalTitulo").innerText = "Editar Categoría";
+        document.getElementById("modalTitulo").innerText = "Editar CategorÃ­a";
         document.getElementById("accion").value = "actualizar";
         document.getElementById("id").value = id;
         document.getElementById("nombre").value = nombre;

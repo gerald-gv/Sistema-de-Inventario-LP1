@@ -1,3 +1,4 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="modelo.Usuario"%>
 <%@page import="modeloDAO.UsuarioDAO"%>
@@ -60,7 +61,7 @@
                     </button>
 
                     <a href="${pageContext.request.contextPath}/ControladorUsuario?accion=eliminar&id=<%=u.getId()%>"
-                       onclick="return confirm('¿Eliminar usuario?')"
+                       onclick="return confirm('Â¿Eliminar usuario?')"
                        class="text-red-600 hover:underline">
                        Eliminar
                     </a>
@@ -96,7 +97,7 @@
             <label class="font-semibold mt-3 block">Rol</label>
             <select name="rol" id="rol" class="w-full p-2 border rounded mt-1 cursor-pointer">
                 <option value="1">Administrador</option>
-                <option value="2">Editor</option>
+                <option value="2">Empleado</option>
             </select>
 
             <div class="mt-5 flex justify-end gap-2">

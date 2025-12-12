@@ -15,7 +15,7 @@ public class CategoriaDAO {
 
     public List<Categoria> listar() {
         List<Categoria> lista = new ArrayList<>();
-        String sql = "SELECT * FROM categorias";
+        String sql = "SELECT * FROM categoria_libros";
 
         try {
             con = Conexion.Conectar();
