@@ -3,3 +3,7 @@ build/
 
 # Configuración local del servidor
 Servers/
+
+#Archivos de eclipse
+.metadata
+.settings

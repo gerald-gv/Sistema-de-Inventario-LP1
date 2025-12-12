@@ -95,7 +95,5 @@
         <jsp:include page="<%= includePath %>" />
     </main>
 	
-
-
 </body>
 </html>
