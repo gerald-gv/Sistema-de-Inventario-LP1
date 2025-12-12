@@ -1,31 +1,36 @@
 package modelo;
 
 public class Categoria {
-	private int idCat;
-	private String nombre;
 
-	public Categoria() {
-	}
+    private int idCategoria;
+    private String nombre;
+    private String descripcion;
+  
+    public Categoria() {}
 
-	public Categoria(int idCat, String nombre) {
-		super();
-		this.idCat = idCat;
-		this.nombre = nombre;
-	}
+    public int getIdCategoria() {
+        return idCategoria;
+    }
 
-	public int getIdCat() {
-		return idCat;
-	}
+    public void setIdCategoria(int idCategoria) {
+        this.idCategoria = idCategoria;
+    }
 
-	public void setIdCat(int idCat) {
-		this.idCat = idCat;
-	}
+    public String getNombre() {
+        return nombre;
+    }
 
-	public String getNombre() {
-		return nombre;
-	}
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 }
+
+
