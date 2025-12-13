@@ -6,7 +6,6 @@ Servers/
 
 #Archivos de eclipse
 .metadata
-.settings
 
 #Archivo de Conexion
 src/main/java/config/Conexion.java

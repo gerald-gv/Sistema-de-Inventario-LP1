@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public class Libros {
 	private int idLibro;
-	private int idCat; //DEPENDE DE LA CATEGORIA
+	private Categoria categoria;; //DEPENDE DE LA CATEGORIA
 	private String titulo;
 	private String autor;
 	private String descripcion;
@@ -15,10 +15,10 @@ public class Libros {
 	public Libros() {
 	}
 
-	public Libros(int idLibro, int idCat, String titulo, String autor, String descripcion, BigDecimal precioCompra,
+	public Libros(int idLibro, Categoria categoria, String titulo, String autor, String descripcion, BigDecimal precioCompra,
 			BigDecimal precioVenta, int stock) {
 		this.idLibro = idLibro;
-		this.idCat = idCat;
+		this.categoria = categoria;
 		this.titulo = titulo;
 		this.autor = autor;
 		this.descripcion = descripcion;
@@ -35,12 +35,12 @@ public class Libros {
 		this.idLibro = idLibro;
 	}
 
-	public int getIdCat() {
-		return idCat;
+	public Categoria getIdCat() {
+		return categoria;
 	}
 
-	public void setIdCat(int idCat) {
-		this.idCat = idCat;
+	public void setIdCat(Categoria categoria) {
+		this.categoria = categoria;
 	}
 
 	public String getTitulo() {
@@ -90,5 +90,4 @@ public class Libros {
 	public void setStock(int stock) {
 		this.stock = stock;
 	}
-	
 }
