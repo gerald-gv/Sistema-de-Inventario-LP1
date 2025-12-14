@@ -53,26 +53,98 @@ public class ClienteDAO implements CRUD<Cliente>, CountMetrics {
 
 	@Override
 	public Cliente list(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	    Cliente cliente = new Cliente();
+	    String sql = "SELECT * FROM clientes WHERE id_cliente = ?";
+
+	    try {
+	        con = Conexion.Conectar();
+	        ps = con.prepareStatement(sql);
+	        ps.setInt(1, id);
+	        rs = ps.executeQuery();
+
+	        if (rs.next()) {
+	            cliente = new Cliente();
+	            cliente.setId(rs.getInt("id_cliente"));
+	            cliente.setNombreNegocio(rs.getString("nombre_negocio"));
+	            cliente.setEmail(rs.getString("customer_email"));
+	            cliente.setContacto(rs.getString("customer_contact"));
+	            cliente.setDireccion(rs.getString("direccion"));
+	            cliente.setTipoCliente(rs.getString("tipo_cliente"));
+	        }
+
+	    } catch (Exception e) {
+	        System.out.println("Error al obtener el cliente: " + e);
+	    }
+
+	    return cliente;
 	}
 
 	@Override
 	public boolean add(Cliente obj) {
-		// TODO Auto-generated method stub
-		return false;
+	    
+	    String sql = "INSERT INTO clientes(nombre_negocio, customer_email, customer_contact, direccion, tipo_cliente) VALUES(?, ?, ?, ?, ?)";
+
+	    try {
+	        con = Conexion.Conectar();
+	        ps = con.prepareStatement(sql);
+	        
+	        ps.setString(1, obj.getNombreNegocio());
+	        ps.setString(2, obj.getEmail());
+	        ps.setString(3, obj.getContacto());
+	        ps.setString(4, obj.getDireccion());
+	        ps.setString(5, obj.getTipoCliente());
+	        
+	        ps.executeUpdate();
+	        return true;
+
+	    } catch (Exception e) {
+	        System.out.println("Error al agregar cliente: " + e);
+	    }
+
+	    return false;
 	}
 
 	@Override
 	public boolean edit(Cliente obj) {
-		// TODO Auto-generated method stub
-		return false;
+	    String sql = "UPDATE clientes SET nombre_negocio=?, customer_email=?, customer_contact=?, direccion=?, tipo_cliente=? WHERE id_cliente=?";
+
+	    try {
+	        con = Conexion.Conectar();
+	        ps = con.prepareStatement(sql);
+	        ps.setString(1, obj.getNombreNegocio());
+	        ps.setString(2, obj.getEmail());
+	        ps.setString(3, obj.getContacto());
+	        ps.setString(4, obj.getDireccion());
+	        ps.setString(5, obj.getTipoCliente());
+	        ps.setInt(6, obj.getId());
+
+	        ps.executeUpdate();
+	        return true;
+
+	    } catch (Exception e) {
+	        System.out.println("Error al editar cliente: " + e);
+	    }
+
+	    return false;
 	}
 
 	@Override
 	public boolean eliminar(int id) {
-		// TODO Auto-generated method stub
-		return false;
+	    String sql = "DELETE FROM clientes WHERE id_cliente=?";
+
+	    try {
+	        con = Conexion.Conectar();
+	        ps = con.prepareStatement(sql);
+	        ps.setInt(1, id);
+
+	        ps.executeUpdate();
+	        return true;
+
+	    } catch (Exception e) {
+	        System.out.println("Error al eliminar cliente: " + e);
+	    }
+
+	    return false;
 	}
 
 	// Contar la cantidad de Clientes
