@@ -8,10 +8,11 @@ import java.util.List;
 
 import config.Conexion;
 import interfaz.CRUD;
+import interfaz.CountMetrics;
 import modelo.Categoria;
 import modelo.Libros;
 
-public class LibrosDAO implements CRUD<Libros> {
+public class LibrosDAO implements CRUD<Libros>, CountMetrics {
 
 	Connection con;
 	PreparedStatement ps;
@@ -173,5 +174,49 @@ public class LibrosDAO implements CRUD<Libros> {
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	// Metodos de Metricas
+	@Override
+	public int count() {
+		int total = 0;
+		String sql = "SELECT COUNT(*) FROM libros";
+		
+		try {
+			con = Conexion.Conectar();
+			ps = con.prepareStatement(sql);
+			rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				total = rs.getInt(1);
+			}
+			
+		} catch (Exception e) {
+			System.out.println("Sucedio un error al obtener la cantidad de la entidad libros: "+ e);
+		}
+		
+		
+		return total;
+	}
+	
+	public int totalStock() {
+		int total = 0;
+		String sql = "SELECT SUM(stock) FROM libros";
+		
+		try {
+			con = Conexion.Conectar();
+			ps = con.prepareStatement(sql);
+			rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				total = rs.getInt(1);
+			}
+			
+		} catch (Exception e) {
+			System.out.println("Sucedio un error al obtener la cantidad de Stock de la entidad libros: "+ e);
+		}
+		
+		
+		return total;
 	}
 }

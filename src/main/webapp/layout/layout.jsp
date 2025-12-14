@@ -41,25 +41,25 @@
 	        <!-- SECCIÓN: PRINCIPAL -->
 	        <p class="text-slate-400 uppercase text-xs tracking-wider mb-1">Principal</p>
 	
-	        <a href="dashboard.jsp?view=inicio"
+	        <a href="<%= request.getContextPath() %>/DashboardServlet?view=inicio"
 	           class="p-2 rounded-lg hover:bg-slate-700 transition">Dashboard</a>
 	
 	        <!-- SECCIÓN: GESTIÓN -->
 	        <p class="text-slate-400 uppercase text-xs tracking-wider mt-4 mb-1">Gestión</p>
 	
 	        <% if ("admin".equalsIgnoreCase(rol)) { %>
-	        <a href="dashboard.jsp?view=usuarios" class=" p-2 text-sky-300 font-semibold rounded-lg hover:bg-sky-700 hover:text-sky-200  transition">
+	        <a href="<%= request.getContextPath() %>/DashboardServlet?view=usuarios" class=" p-2 text-sky-300 font-semibold rounded-lg hover:bg-sky-700 hover:text-sky-200  transition">
 	            Usuarios
 	        </a>
 	        <% } %>
 	
-	        <a href="dashboard.jsp?view=categorias" class="font-medium p-2 rounded-lg hover:bg-slate-700 transition">Categorias</a>
+	        <a href="<%= request.getContextPath() %>/DashboardServlet?view=categorias" class="font-medium p-2 rounded-lg hover:bg-slate-700 transition">Categorias</a>
 	
-	        <a href="dashboard.jsp?view=productos" class="font-medium p-2 rounded-lg hover:bg-slate-700 transition">Productos</a>
+	        <a href="<%= request.getContextPath() %>/DashboardServlet?view=productos" class="font-medium p-2 rounded-lg hover:bg-slate-700 transition">Productos</a>
 	
-	        <a href="dashboard.jsp?view=clientes" class=" font-medium p-2 rounded-lg hover:bg-slate-700 transition">Clientes</a>
+	        <a href="<%= request.getContextPath() %>/DashboardServlet?view=clientes" class=" font-medium p-2 rounded-lg hover:bg-slate-700 transition">Clientes</a>
 	
-	        <a href="dashboard.jsp?view=proveedores" class="font-medium p-2 rounded-lg hover:bg-slate-700 transition">Proveedores</a>
+	        <a href="<%= request.getContextPath() %>/DashboardServlet?view=proveedores" class="font-medium p-2 rounded-lg hover:bg-slate-700 transition">Proveedores</a>
 	
 	        <!-- SECCIÓN: OPERACIONES -->
 	        <p class="text-slate-400 uppercase text-xs tracking-wider mt-4 mb-1">Operaciones</p>
@@ -83,11 +83,7 @@
     <main class="flex-1 p-8">
         <%
             
-            String viewParam = request.getParameter("view");
-        
-            if (viewParam == null || viewParam.trim().isEmpty()) {
-                viewParam = "inicio";
-            }
+        	String viewParam = (String) request.getAttribute("view");
             
             String includePath = "/views/" + viewParam + ".jsp";
         %>

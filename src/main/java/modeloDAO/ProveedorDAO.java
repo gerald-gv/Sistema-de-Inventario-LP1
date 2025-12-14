@@ -8,9 +8,10 @@ import java.util.List;
 
 import config.Conexion;
 import interfaz.CRUD;
+import interfaz.CountMetrics;
 import modelo.Proveedor;
 
-public class ProveedorDAO implements CRUD<Proveedor>{
+public class ProveedorDAO implements CRUD<Proveedor>, CountMetrics{
 	
 	
 	Connection cnx;
@@ -155,6 +156,28 @@ public class ProveedorDAO implements CRUD<Proveedor>{
         }
 
         return false;
+	}
+
+	@Override
+	public int count() {
+		int total = 0;
+		String sql = "SELECT COUNT(*) FROM proveedores";
+		
+		try {
+			Connection con = Conexion.Conectar();
+			PreparedStatement ps = con.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				total = rs.getInt(1);
+			}
+			
+		} catch (Exception e) {
+			System.out.println("Sucedio un error al obtener la cantidad de la entidad proveedores: "+ e);
+		}
+		
+		
+		return total;
 	}
 
 }

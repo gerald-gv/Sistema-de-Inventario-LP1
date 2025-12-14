@@ -37,7 +37,7 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute("usuarioLogueado", usuarioValidado);
             
             // Redirrecion al dashboard (Inicio)
-            response.sendRedirect("layout/dashboard.jsp?view=inicio");
+            response.sendRedirect(request.getContextPath() + "/DashboardServlet?view=inicio");
             
         } else {
             request.setAttribute("errorLogin", "Email o contraseña incorrectos.");

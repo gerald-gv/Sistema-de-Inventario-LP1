@@ -7,9 +7,10 @@ import java.util.List;
 
 import config.Conexion;
 import interfaz.CRUD;
+import interfaz.CountMetrics;
 import modelo.Cliente;
 
-public class ClienteDAO implements CRUD<Cliente>{
+public class ClienteDAO implements CRUD<Cliente>, CountMetrics {
 	
 	
 	Connection con;
@@ -72,6 +73,29 @@ public class ClienteDAO implements CRUD<Cliente>{
 	public boolean eliminar(int id) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	// Contar la cantidad de Clientes
+	@Override
+	public int count() {
+		
+		int total = 0;
+		String sql = "SELECT COUNT(*) FROM clientes";
+		
+		try {
+			con = Conexion.Conectar();
+			ps = con.prepareStatement(sql);
+			rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				total = rs.getInt(1);
+			}
+			
+		} catch (Exception e) {
+			System.out.println("Sucedio un error al obtener la cantidad de la entidad Clientes: "+ e);
+		}
+		
+		return total;
 	}
 
 }
