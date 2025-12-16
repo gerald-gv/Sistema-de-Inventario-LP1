@@ -7,16 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import config.Conexion;
+import interfaz.CRUD;
 
-public class UsuarioDAO {
+public class UsuarioDAO implements CRUD<Usuario> {
 
     // VALIDAR LOGIN
     public Usuario validar(String email, String password) {
         Usuario usuario = new Usuario();
 
-        String sql = "SELECT u.id_usuario, u.user_email, u.username, u.password, r.id_rol, r.nombre AS nombreRol "
-                   + "FROM usuarios u JOIN roles r ON u.id_rol = r.id_rol "
-                   + "WHERE u.user_email=? AND u.password=?";
+        String sql = "SELECT u.id_usuario, u.user_email, u.username, u.password, " +
+                     "r.id_rol, r.nombre AS nombreRol " +
+                     "FROM usuarios u JOIN roles r ON u.id_rol = r.id_rol " +
+                     "WHERE u.user_email=? AND u.password=?";
 
         Connection con = null;
         PreparedStatement ps = null;
@@ -25,7 +27,6 @@ public class UsuarioDAO {
         try {
             con = Conexion.Conectar();
             ps = con.prepareStatement(sql);
-
             ps.setString(1, email);
             ps.setString(2, password);
 
@@ -42,7 +43,6 @@ public class UsuarioDAO {
                 rol.setNombre(rs.getString("nombreRol"));
                 usuario.setRol(rol);
             }
-
         } catch (SQLException e) {
             System.err.println("Error en validar usuario: " + e.getMessage());
         } finally {
@@ -54,18 +54,17 @@ public class UsuarioDAO {
                 System.err.println("Error al cerrar conexiones: " + e.getMessage());
             }
         }
-
         return usuario;
     }
 
-    // LISTAR TODO
+    // CRUD
+    @Override
     public List<Usuario> listar() {
         List<Usuario> lista = new ArrayList<>();
 
-        String sql = "SELECT u.id_usuario, u.username, u.user_email, u.password, "
-                   + "r.id_rol, r.nombre AS nombreRol "
-                   + "FROM usuarios u "
-                   + "JOIN roles r ON u.id_rol = r.id_rol";
+        String sql = "SELECT u.id_usuario, u.username, u.user_email, u.password, " +
+                     "r.id_rol, r.nombre AS nombreRol " +
+                     "FROM usuarios u JOIN roles r ON u.id_rol = r.id_rol";
 
         try {
             Connection con = Conexion.Conectar();
@@ -74,7 +73,6 @@ public class UsuarioDAO {
 
             while (rs.next()) {
                 Usuario u = new Usuario();
-
                 u.setId(rs.getInt("id_usuario"));
                 u.setUsername(rs.getString("username"));
                 u.setUserEmail(rs.getString("user_email"));
@@ -87,23 +85,20 @@ public class UsuarioDAO {
 
                 lista.add(u);
             }
-
         } catch (SQLException e) {
             System.out.println("Error al listar usuarios: " + e);
         }
-
         return lista;
     }
 
-    // OBTENER POR ID
+    @Override
     public Usuario list(int id) {
         Usuario u = new Usuario();
 
-        String sql = "SELECT u.id_usuario, u.username, u.user_email, u.password, "
-                   + "r.id_rol, r.nombre AS nombreRol "
-                   + "FROM usuarios u "
-                   + "JOIN roles r ON u.id_rol = r.id_rol "
-                   + "WHERE u.id_usuario=?";
+        String sql = "SELECT u.id_usuario, u.username, u.user_email, u.password, " +
+                     "r.id_rol, r.nombre AS nombreRol " +
+                     "FROM usuarios u JOIN roles r ON u.id_rol = r.id_rol " +
+                     "WHERE u.id_usuario=?";
 
         try {
             Connection con = Conexion.Conectar();
@@ -123,15 +118,13 @@ public class UsuarioDAO {
                 r.setNombre(rs.getString("nombreRol"));
                 u.setRol(r);
             }
-
         } catch (SQLException e) {
             System.out.println("Error al obtener usuario: " + e);
         }
-
         return u;
     }
 
-    // AGREGAR
+    @Override
     public boolean add(Usuario u) {
         String sql = "INSERT INTO usuarios(username, user_email, password, id_rol) VALUES(?,?,?,?)";
 
@@ -146,15 +139,13 @@ public class UsuarioDAO {
 
             ps.executeUpdate();
             return true;
-
         } catch (SQLException e) {
             System.out.println("Error al agregar usuario: " + e);
         }
-
         return false;
     }
 
-    // EDITAR
+    @Override
     public boolean edit(Usuario u) {
         String sql = "UPDATE usuarios SET username=?, user_email=?, password=?, id_rol=? WHERE id_usuario=?";
 
@@ -170,15 +161,13 @@ public class UsuarioDAO {
 
             ps.executeUpdate();
             return true;
-
         } catch (SQLException e) {
             System.out.println("Error al editar usuario: " + e);
         }
-
         return false;
     }
 
-    // ELIMINAR
+    @Override
     public boolean eliminar(int id) {
         String sql = "DELETE FROM usuarios WHERE id_usuario=?";
 
@@ -189,11 +178,9 @@ public class UsuarioDAO {
 
             ps.executeUpdate();
             return true;
-
         } catch (SQLException e) {
             System.out.println("Error al eliminar usuario: " + e);
         }
-
         return false;
     }
 }

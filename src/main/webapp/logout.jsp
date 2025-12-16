@@ -1,5 +1,6 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
-    session.invalidate(); 
+    session.invalidate();
+    session = request.getSession(true);
+    session.setAttribute("toastLogout", "Sesión cerrada correctamente");
     response.sendRedirect("login.jsp");
 %>

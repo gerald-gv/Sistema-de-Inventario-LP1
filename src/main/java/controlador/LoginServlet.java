@@ -32,13 +32,15 @@ public class LoginServlet extends HttpServlet {
         Usuario usuarioValidado = dao.validar(email, password);
         
         if (usuarioValidado.getId() != 0) {
-        	
+
             HttpSession session = request.getSession();
             session.setAttribute("usuarioLogueado", usuarioValidado);
-            
-            // Redirrecion al dashboard (Inicio)
+
+            // Toast de bienvenida
+            session.setAttribute("toastLogin", "Bienvenido " + usuarioValidado.getUsername());
+
             response.sendRedirect(request.getContextPath() + "/DashboardServlet?view=inicio");
-            
+
         } else {
             request.setAttribute("errorLogin", "Email o contraseña incorrectos.");
             request.getRequestDispatcher("login.jsp").forward(request, response);

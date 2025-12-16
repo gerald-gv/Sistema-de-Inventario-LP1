@@ -5,91 +5,175 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Dashboard</title>
+
 <script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+    .sidebar.animate {
+        animation: slideIn 0.5s ease-out;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .nav-link {
+        transition: background-color 0.2s ease,
+                    color 0.2s ease,
+                    transform 0.15s ease;
+    }
+
+    .nav-link:hover {
+        transform: translateX(4px);
+    }
+
+    .nav-link.active {
+        box-shadow: inset 3px 0 0 #38bdf8;
+    }
+</style>
 </head>
-<body class="flex bg-gray-100 min-h-screen">
 
-	<%
-		Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-		
-		//Validacion de existencia de usuario
-		if(usuario == null){
-			response.sendRedirect("login.jsp");
-			return;
-		}
-		
-		String rol = usuario.getRol() != null ? usuario.getRol().getNombre() : " " ;
-		
-	%>
-	
-	
-	
-<body class="flex bg-gray-100 min-h-screen">
+<body class="flex bg-slate-100 min-h-screen">
 
-	<!-- SIDEBAR -->
-	<aside class="w-80 h-screen bg-gradient-to-b from-slate-800 to-slate-900 text-white p-6 shadow-xl">
-	
-	    <!-- HEADER DEL USUARIO -->
-	    <h2 class="text-xl font-semibold mb-1">Bienvenido,</h2>
-	    <p class="text-sky-300 text-lg font-medium mb-4"><%= usuario.getUsername() %></p>
-	
-	    <hr class="border-blue-700 mb-6 ">
-	
-	    <nav class="flex flex-col space-y-2 text-sm">
-	
-	        <!-- SECCIÓN: PRINCIPAL -->
-	        <p class="text-slate-400 uppercase text-xs tracking-wider mb-1">Principal</p>
-	
-	        <a href="<%= request.getContextPath() %>/DashboardServlet?view=inicio"
-	           class="p-2 rounded-lg hover:bg-slate-700 transition">Dashboard</a>
-	
-	        <!-- SECCIÓN: GESTIÓN -->
-	        <p class="text-slate-400 uppercase text-xs tracking-wider mt-4 mb-1">Gestión</p>
-	
-	        <% if ("admin".equalsIgnoreCase(rol)) { %>
-	        <a href="<%= request.getContextPath() %>/DashboardServlet?view=usuarios" class=" p-2 text-sky-300 font-semibold rounded-lg hover:bg-sky-700 hover:text-sky-200  transition">
-	            Usuarios
-	        </a>
-	        <% } %>
-	
-	        <a href="<%= request.getContextPath() %>/DashboardServlet?view=categorias" class="font-medium p-2 rounded-lg hover:bg-slate-700 transition">Categorias</a>
-	
-	        <a href="<%= request.getContextPath() %>/DashboardServlet?view=productos" class="font-medium p-2 rounded-lg hover:bg-slate-700 transition">Productos</a>
-	
-	        <a href="<%= request.getContextPath() %>/DashboardServlet?view=clientes" class=" font-medium p-2 rounded-lg hover:bg-slate-700 transition">Clientes</a>
-	
-	        <a href="<%= request.getContextPath() %>/DashboardServlet?view=proveedores" class="font-medium p-2 rounded-lg hover:bg-slate-700 transition">Proveedores</a>
-	
-	        <!-- SECCIÓN: OPERACIONES -->
-	        <p class="text-slate-400 uppercase text-xs tracking-wider mt-4 mb-1">Operaciones</p>
-	
-	        <a href="dashboard.jsp?view=compra" class="font-medium p-2 rounded-lg hover:bg-slate-700 transition">Compra</a>
-	
-	        <a href="dashboard.jsp?view=venta" class="font-medium p-2 rounded-lg hover:bg-slate-700 transition">Venta</a>
-	
-	        <!-- SECCIÓN FINAL -->
-	        <hr class="border-blue-700 mt-6 mb-3">
-	
-	        <a href="<%= request.getContextPath() + "/logout.jsp" %>" class="p-2 rounded-lg hover:bg-red-600 hover:text-white transition-colors duration-300 text-slate-300">
-	            Cerrar sesión
-	        </a>
-	
-	    </nav>
-	</aside>
+<%
+    Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
 
+    if (usuario == null) {
+        response.sendRedirect("login.jsp");
+        return;
+    }
 
-    <!-- CONTENIDO DINAMICO -->
-    <main class="flex-1 p-8">
-        <%
-            
-        	String viewParam = (String) request.getAttribute("view");
-            
-            String includePath = "/views/" + viewParam + ".jsp";
-        %>
+    String rol = usuario.getRol() != null ? usuario.getRol().getNombre() : "";
+    String view = (String) request.getAttribute("view");
+%>
 
-        <jsp:include page="<%= includePath %>" />
-    </main>
-	
-</body>
+<!-- SIDEBAR -->
+<aside class="sidebar w-80 min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-white p-6 shadow-2xl">
+
+    <!-- USUARIO -->
+    <div class="mb-6">
+        <p class="text-slate-400 text-sm">Bienvenido,</p>
+        <h2 class="text-xl font-semibold text-sky-400 flex items-center gap-2">
+            <i class="fa-solid fa-user"></i>
+            <%= usuario.getUsername() %>
+        </h2>
+    </div>
+
+    <hr class="border-slate-700 mb-6">
+
+    <nav class="flex flex-col text-sm space-y-1">
+
+        <p class="text-slate-500 uppercase text-xs tracking-wider mb-2">Principal</p>
+
+        <a href="<%= request.getContextPath() %>/DashboardServlet?view=inicio"
+           class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg
+           <%= "inicio".equals(view)
+                ? "active bg-sky-600 text-white font-medium"
+                : "text-slate-300 hover:bg-slate-700 hover:text-white" %>">
+            <i class="fa-solid fa-gauge-high w-4 text-center"></i>
+            <span>Dashboard</span>
+        </a>
+
+        <p class="text-slate-500 uppercase text-xs tracking-wider mt-5 mb-2">Gestión</p>
+
+        <% if ("admin".equalsIgnoreCase(rol)) { %>
+        <a href="<%= request.getContextPath() %>/DashboardServlet?view=usuarios"
+           class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg
+           <%= "usuarios".equals(view)
+                ? "active bg-sky-600 text-white font-medium"
+                : "text-slate-300 hover:bg-slate-700 hover:text-white" %>">
+            <i class="fa-solid fa-users w-4 text-center"></i>
+            <span>Usuarios</span>
+        </a>
+        <% } %>
+
+        <a href="<%= request.getContextPath() %>/DashboardServlet?view=categorias"
+           class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg
+           <%= "categorias".equals(view)
+                ? "active bg-sky-600 text-white font-medium"
+                : "text-slate-300 hover:bg-slate-700 hover:text-white" %>">
+            <i class="fa-solid fa-tags w-4 text-center"></i>
+            <span>Categorías</span>
+        </a>
+
+        <a href="<%= request.getContextPath() %>/DashboardServlet?view=productos"
+           class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg
+           <%= "productos".equals(view)
+                ? "active bg-sky-600 text-white font-medium"
+                : "text-slate-300 hover:bg-slate-700 hover:text-white" %>">
+            <i class="fa-solid fa-box w-4 text-center"></i>
+            <span>Productos</span>
+        </a>
+
+        <a href="<%= request.getContextPath() %>/DashboardServlet?view=clientes"
+           class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg
+           <%= "clientes".equals(view)
+                ? "active bg-sky-600 text-white font-medium"
+                : "text-slate-300 hover:bg-slate-700 hover:text-white" %>">
+            <i class="fa-solid fa-user-group w-4 text-center"></i>
+            <span>Clientes</span>
+        </a>
+
+        <a href="<%= request.getContextPath() %>/DashboardServlet?view=proveedores"
+           class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg
+           <%= "proveedores".equals(view)
+                ? "active bg-sky-600 text-white font-medium"
+                : "text-slate-300 hover:bg-slate-700 hover:text-white" %>">
+            <i class="fa-solid fa-truck w-4 text-center"></i>
+            <span>Proveedores</span>
+        </a>
+
+        <!-- OPERACIONES -->
+        <p class="text-slate-500 uppercase text-xs tracking-wider mt-5 mb-2">Operaciones</p>
+
+        <a href="<%= request.getContextPath() %>/DashboardServlet?view=compra"
+           class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg
+           <%= "compra".equals(view)
+                ? "active bg-sky-600 text-white font-medium"
+                : "text-slate-300 hover:bg-slate-700 hover:text-white" %>">
+            <i class="fa-solid fa-cart-shopping w-4 text-center"></i>
+            <span>Compra</span>
+        </a>
+
+        <a href="<%= request.getContextPath() %>/DashboardServlet?view=venta"
+           class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg
+           <%= "venta".equals(view)
+                ? "active bg-sky-600 text-white font-medium"
+                : "text-slate-300 hover:bg-slate-700 hover:text-white" %>">
+            <i class="fa-solid fa-cash-register w-4 text-center"></i>
+            <span>Venta</span>
+        </a>
+
+        <hr class="border-slate-700 mt-6 mb-3">
+
+        <!-- LOGOUT -->
+        <a href="<%= request.getContextPath() + "/logout.jsp" %>"
+           class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg
+                  text-slate-300 hover:bg-red-600 hover:text-white">
+            <i class="fa-solid fa-right-from-bracket w-4 text-center"></i>
+            <span>Cerrar sesión</span>
+        </a>
+
+    </nav>
+</aside>
+
+<!-- CONTENIDO -->
+		<main class="flex-1 p-8">
+    		<%
+        		String viewParam = (String) request.getAttribute("view");
+        		String includePath = "/views/" + viewParam + ".jsp";
+    		%>
+    		<jsp:include page="<%= includePath %>" />
+		</main>
+	</body>
 </html>
