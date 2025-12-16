@@ -30,14 +30,16 @@ public class ControladorLibro extends HttpServlet {
 
         if (accion == null || accion.equals("listar")) {
             request.setAttribute("listaLibros", dao.listar());
-            request.getRequestDispatcher("views/productos.jsp").forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/DashboardServlet?view=productos");
+
             return;
         }
 
         if (accion.equals("eliminar")) {
             int id = Integer.parseInt(request.getParameter("id"));
             dao.eliminar(id);
-            response.sendRedirect(request.getContextPath() + "/layout/dashboard.jsp?view=productos");
+            response.sendRedirect(request.getContextPath() + "/DashboardServlet?view=productos");
+
         }
     }
 
@@ -77,6 +79,7 @@ public class ControladorLibro extends HttpServlet {
             dao.edit(libro);
         }
 
-        response.sendRedirect(request.getContextPath() + "/layout/dashboard.jsp?view=productos");
+        response.sendRedirect(request.getContextPath() + "/DashboardServlet?view=productos");
+
     }
 }

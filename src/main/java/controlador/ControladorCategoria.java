@@ -26,7 +26,8 @@ public class ControladorCategoria extends HttpServlet {
             dao.eliminar(id);
         }
 
-        response.sendRedirect(request.getContextPath() + "/layout/dashboard.jsp?view=categorias");
+        response.sendRedirect(request.getContextPath() + "/DashboardServlet?view=categorias");
+
     }
 
     @Override
@@ -50,6 +51,7 @@ public class ControladorCategoria extends HttpServlet {
             dao.edit(c);
         }
 
-        response.sendRedirect(request.getContextPath() + "/layout/dashboard.jsp?view=categorias");
+        response.sendRedirect(request.getContextPath() + "/DashboardServlet?view=categorias");
+
     }
 }

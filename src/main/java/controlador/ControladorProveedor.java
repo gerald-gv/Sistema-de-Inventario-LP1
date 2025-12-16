@@ -25,7 +25,8 @@ public class ControladorProveedor extends HttpServlet {
             dao.eliminar(id);
         }
 
-        response.sendRedirect(request.getContextPath() + "/layout/dashboard.jsp?view=proveedores");
+        response.sendRedirect(request.getContextPath() + "/DashboardServlet?view=proveedores");
+
     }
 
     @Override
@@ -59,6 +60,7 @@ public class ControladorProveedor extends HttpServlet {
             dao.edit(p);
         }
 
-        response.sendRedirect(request.getContextPath() + "/layout/dashboard.jsp?view=proveedores");
+        response.sendRedirect(request.getContextPath() + "/DashboardServlet?view=proveedores");
+
     }
 }
