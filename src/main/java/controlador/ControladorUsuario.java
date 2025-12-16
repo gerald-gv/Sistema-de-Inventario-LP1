@@ -27,7 +27,7 @@ public class ControladorUsuario extends HttpServlet {
             dao.eliminar(id);
         }
 
-        response.sendRedirect(request.getContextPath() + "/layout/dashboard.jsp?view=usuarios");
+        response.sendRedirect(request.getContextPath() + "/DashboardServlet?view=usuarios");
     }
 
     @Override
@@ -64,6 +64,6 @@ public class ControladorUsuario extends HttpServlet {
             dao.edit(u);
         }
 
-        response.sendRedirect(request.getContextPath() + "/layout/dashboard.jsp?view=usuarios");
+        response.sendRedirect(request.getContextPath() + "/DashboardServlet?view=usuarios");
     }
 }
