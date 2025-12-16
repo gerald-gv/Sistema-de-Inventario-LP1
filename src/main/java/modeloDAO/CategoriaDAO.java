@@ -1,26 +1,24 @@
 package modeloDAO;
 
+import interfaz.CRUD;
+import modelo.Categoria;
+import config.Conexion;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import config.Conexion;
-import modelo.Categoria;
+public class CategoriaDAO implements CRUD<Categoria> {
 
-public class CategoriaDAO {
-
-    Connection con;
-    PreparedStatement ps;
-    ResultSet rs;
-
+    @Override
     public List<Categoria> listar() {
         List<Categoria> lista = new ArrayList<>();
         String sql = "SELECT * FROM categoria_libros";
 
         try {
-            con = Conexion.Conectar();
-            ps = con.prepareStatement(sql);
-            rs = ps.executeQuery();
+            Connection con = Conexion.Conectar();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 Categoria c = new Categoria();
@@ -35,15 +33,17 @@ public class CategoriaDAO {
         return lista;
     }
 
+    @Override
     public Categoria list(int id) {
         Categoria c = new Categoria();
-        String sql = "SELECT * FROM categorias WHERE id_categoria=?";
+        String sql = "SELECT * FROM categoria_libros WHERE id_categoria=?";
 
         try {
-            con = Conexion.Conectar();
-            ps = con.prepareStatement(sql);
+            Connection con = Conexion.Conectar();
+            PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, id);
-            rs = ps.executeQuery();
+
+            ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
                 c.setIdCategoria(rs.getInt("id_categoria"));
@@ -56,55 +56,57 @@ public class CategoriaDAO {
         return c;
     }
 
+    @Override
     public boolean add(Categoria c) {
-        String sql = "INSERT INTO categorias(nombre, descripcion) VALUES(?,?)";
+        String sql = "INSERT INTO categoria_libros(nombre, descripcion) VALUES (?,?)";
 
         try {
-            con = Conexion.Conectar();
-            ps = con.prepareStatement(sql);
+            Connection con = Conexion.Conectar();
+            PreparedStatement ps = con.prepareStatement(sql);
+
             ps.setString(1, c.getNombre());
             ps.setString(2, c.getDescripcion());
             ps.executeUpdate();
             return true;
-
         } catch (SQLException e) {
             System.out.println("Error al agregar categoría: " + e);
         }
         return false;
     }
 
+    @Override
     public boolean edit(Categoria c) {
-        String sql = "UPDATE categorias SET nombre=?, descripcion=? WHERE id_categoria=?";
+        String sql = "UPDATE categoria_libros SET nombre=?, descripcion=? WHERE id_categoria=?";
 
         try {
-            con = Conexion.Conectar();
-            ps = con.prepareStatement(sql);
+            Connection con = Conexion.Conectar();
+            PreparedStatement ps = con.prepareStatement(sql);
+
             ps.setString(1, c.getNombre());
             ps.setString(2, c.getDescripcion());
             ps.setInt(3, c.getIdCategoria());
             ps.executeUpdate();
             return true;
-
         } catch (SQLException e) {
             System.out.println("Error al editar categoría: " + e);
         }
         return false;
     }
 
+    @Override
     public boolean eliminar(int id) {
-        String sql = "DELETE FROM categorias WHERE id_categoria=?";
+        String sql = "DELETE FROM categoria_libros WHERE id_categoria=?";
 
         try {
-            con = Conexion.Conectar();
-            ps = con.prepareStatement(sql);
+            Connection con = Conexion.Conectar();
+            PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, id);
+
             ps.executeUpdate();
             return true;
-
         } catch (SQLException e) {
             System.out.println("Error al eliminar categoría: " + e);
         }
         return false;
     }
 }
-

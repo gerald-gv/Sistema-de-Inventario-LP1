@@ -4,76 +4,138 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Login - Sistema de Inventario</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        .contrasena-container {
-            position: relative;
-        }
-        .contrasena-toggle {
+        .input-icon {
             position: absolute;
-            right: 10px;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
             top: 50%;
             transform: translateY(-50%);
             cursor: pointer;
-            color: #4b5563;
-            padding: 5px;
+            color: #6b7280;
+        }
+
+        .login-card {
+            animation: fadeSlide 0.6s ease-out;
+        }
+
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        input {
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        button {
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+
+        button:active {
+            transform: scale(0.98);
         }
     </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
-    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
-        <h2 class="text-2xl font-bold mb-6 text-center">Iniciar Sesión</h2>
-        
+
+<body class="bg-slate-100 flex items-center justify-center min-h-screen">
+
+    <div class="login-card bg-white w-full max-w-sm p-8 rounded-xl shadow-lg">
+
+        <div class="text-center mb-6">
+            <div class="text-sky-600 text-4xl mb-2">
+                <i class="fa-solid fa-boxes-stacked"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-700">
+                Sistema de Inventario
+            </h2>
+            <p class="text-sm text-slate-500 mt-1">
+                Iniciar sesión
+            </p>
+        </div>
+
         <% if (request.getAttribute("errorLogin") != null) { %>
-            <div class="p-3 mb-4 text-sm text-red-700 bg-red-100 rounded-lg text-center" role="alert">
-                <%= request.getAttribute("errorLogin") %>
+            <div class="mb-4 p-3 rounded-lg bg-red-100 text-red-700 text-sm flex items-center gap-2">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <span><%= request.getAttribute("errorLogin") %></span>
             </div>
         <% } %>
 
-        <form action="LoginServlet" method="POST"> 
-            <div class="mb-4">
-                <label for="email" class="block text-gray-700 font-bold mb-2">Correo Electrónico</label>
-                <input type="email" id="email" name="email" class="w-full px-3 py-2 border rounded-lg focus:outline-none" required>
+        <form action="LoginServlet" method="POST" class="space-y-5">
+            <div>
+                <label class="block text-sm font-medium text-slate-600 mb-1">
+                    Correo electrónico
+                </label>
+                <div class="relative">
+                    <i class="fa-solid fa-envelope input-icon"></i>
+                    <input
+                        type="email"
+                        name="email"
+                        required
+                        class="w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-sky-500">
+                </div>
             </div>
-             
-            <div class="mb-6">
-                <label for="password" class="block text-gray-700 font-bold mb-2">Contraseña</label>
-                <div class="contrasena-container">
-                    <input type="password" id="contrasena" name="contrasena" class="w-full px-3 py-2 border rounded-lg focus:outline-none" required>
-                    <span id="togglePassword" class="contrasena-toggle">
-                        <i class="fas fa-eye-slash"></i> 
+
+            <div>
+                <label class="block text-sm font-medium text-slate-600 mb-1">
+                    Contraseña
+                </label>
+                <div class="relative">
+                    <i class="fa-solid fa-lock input-icon"></i>
+                    <input
+                        type="password"
+                        id="contrasena"
+                        name="contrasena"
+                        required
+                        class="w-full pl-10 pr-10 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-sky-500">
+
+                    <span id="togglePassword" class="password-toggle">
+                        <i class="fa-solid fa-eye-slash"></i>
                     </span>
                 </div>
             </div>
-            
-            <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition duration-200">
+
+            <button
+                type="submit"
+                class="w-full bg-sky-600 text-white py-2 rounded-lg font-semibold hover:bg-sky-700">
+                <i class="fa-solid fa-right-to-bracket mr-2"></i>
                 Entrar
             </button>
+
         </form>
     </div>
 
+	<div id="toastContainer" class="fixed top-5 right-5 z-50 space-y-3"></div>
+
     <script>
-	    document.addEventListener('DOMContentLoaded', function () {
-	        const passwordInput = document.getElementById('contrasena');
-	        const toggleButton = document.getElementById('togglePassword');
-	
-	        toggleButton.addEventListener('click', function () {
-	            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-	            
-	            passwordInput.setAttribute('type', type);
-	            
-	            const icon = this.querySelector('i');
-	            if (type === 'text') {
-	                icon.classList.remove('fa-eye-slash');
-	                icon.classList.add('fa-eye');
-	            } else {
-	                icon.classList.remove('fa-eye');
-	                icon.classList.add('fa-eye-slash');
-	            }
-	        });
-	    });
-	</script>
+        const passwordInput = document.getElementById('contrasena');
+        const toggleButton = document.getElementById('togglePassword');
+
+        toggleButton.addEventListener('click', function () {
+            const type = passwordInput.type === 'password' ? 'text' : 'password';
+            passwordInput.type = type;
+
+            const icon = this.querySelector('i');
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        });
+    </script>
 </body>
 </html>
