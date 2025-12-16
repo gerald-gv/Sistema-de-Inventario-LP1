@@ -2,7 +2,6 @@
 <%@ page import="modelo.Usuario" %>
 <%
     Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-
 %>
 
 
@@ -84,9 +83,4 @@
         	</div>
     	</div>
 	</div>
-    
-    
-
 </section>
-
-
