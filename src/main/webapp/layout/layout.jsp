@@ -136,7 +136,7 @@
         <!-- OPERACIONES -->
         <p class="text-slate-500 uppercase text-xs tracking-wider mt-5 mb-2">Operaciones</p>
 
-        <a href="<%= request.getContextPath() %>/DashboardServlet?view=compra"
+        <a href="<%= request.getContextPath() %>/DashboardServlet?view=compras"
            class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg
            <%= "compra".equals(view)
                 ? "active bg-sky-600 text-white font-medium"

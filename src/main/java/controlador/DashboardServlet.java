@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import modeloDAO.ClienteDAO;
+import modeloDAO.CompraDetalleDAO;
+import modeloDAO.ComprasDAO;
 import modeloDAO.LibrosDAO;
 import modeloDAO.ProveedorDAO;
 
@@ -64,5 +66,4 @@ public class DashboardServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-
 }
