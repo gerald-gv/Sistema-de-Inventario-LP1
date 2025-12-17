@@ -1,5 +1,6 @@
 package modeloDAO;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,11 +10,12 @@ import java.util.List;
 
 import config.Conexion;
 import interfaz.CRUD;
+import interfaz.CountMetrics;
 import modelo.Compras;
 import modelo.Proveedor;
 import modelo.Usuario;
 
-public class ComprasDAO implements CRUD<Compras> {
+public class ComprasDAO implements CRUD<Compras>, CountMetrics {
 
     private static final String SQL_LISTAR = """
             SELECT c.id_compra, c.total_compra, c.fecha,
@@ -52,6 +54,10 @@ public class ComprasDAO implements CRUD<Compras> {
             )
             WHERE c.id_compra = ?
             """;
+    
+    private static final String SQL_TOTAL_COMPRAS_REGISTRADAS = "SELECT COUNT(*) FROM compras";
+    
+    private static final String SQL_SUMA_TOTAL_COMPRAS = "SELECT SUM(total_compra) FROM compras";
 
     @Override
     public List<Compras> listar() {
@@ -177,4 +183,41 @@ public class ComprasDAO implements CRUD<Compras> {
 
         return compra;
     }
+
+	@Override
+	public int count() {
+		int total = 0;
+		
+		try(Connection con = Conexion.Conectar();
+			PreparedStatement ps = con.prepareStatement(SQL_TOTAL_COMPRAS_REGISTRADAS);
+			ResultSet rs = ps.executeQuery()) {
+			
+			if(rs.next()) {
+				total = rs.getInt(1);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("Sucedio un error al obtener la cantidad de la entidad compras: "+ e);
+		}
+		
+		return total;
+	}
+	
+	public BigDecimal sumaTotalCompras() {
+		BigDecimal sumaTotal = BigDecimal.ZERO;
+		
+		try(Connection con = Conexion.Conectar();
+				PreparedStatement ps = con.prepareStatement(SQL_SUMA_TOTAL_COMPRAS);
+				ResultSet rs = ps.executeQuery()) {
+				
+				if(rs.next()) {
+					sumaTotal = rs.getBigDecimal(1);
+				}
+				
+			} catch (SQLException e) {
+				System.out.println("Sucedio un error al intentar obtener el importe total de compra "+ e);
+			}
+		
+		return sumaTotal;
+	}
 }

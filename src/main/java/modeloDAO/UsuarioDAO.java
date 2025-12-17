@@ -8,8 +8,9 @@ import java.util.List;
 
 import config.Conexion;
 import interfaz.CRUD;
+import interfaz.CountMetrics;
 
-public class UsuarioDAO implements CRUD<Usuario> {
+public class UsuarioDAO implements CRUD<Usuario>, CountMetrics {
 
     // VALIDAR LOGIN
     public Usuario validar(String email, String password) {
@@ -183,4 +184,25 @@ public class UsuarioDAO implements CRUD<Usuario> {
         }
         return false;
     }
+
+	@Override
+	public int count() {
+		int total = 0;
+		String sql = "SELECT COUNT(*) FROM usuarios";
+		
+		try {
+			Connection con = Conexion.Conectar();
+			PreparedStatement ps = con.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				total = rs.getInt(1);
+			}
+			
+		} catch (Exception e) {
+			System.out.println("Sucedio un error al obtener la cantidad de la entidad Uusario: "+ e);
+		}
+		
+		return total;
+	}
 }

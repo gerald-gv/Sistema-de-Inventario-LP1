@@ -1,6 +1,7 @@
 package modeloDAO;
 
 import interfaz.CRUD;
+import interfaz.CountMetrics;
 import modelo.Categoria;
 import config.Conexion;
 
@@ -8,7 +9,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoriaDAO implements CRUD<Categoria> {
+public class CategoriaDAO implements CRUD<Categoria>, CountMetrics {
 
     @Override
     public List<Categoria> listar() {
@@ -109,4 +110,27 @@ public class CategoriaDAO implements CRUD<Categoria> {
         }
         return false;
     }
+
+	@Override
+	public int count() {
+		int total = 0;
+		
+		String sql = "SELECT COUNT(*) FROM categoria_libros";
+		
+		try {
+			Connection con = Conexion.Conectar();
+			PreparedStatement ps = con.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				total = rs.getInt(1);
+			}
+			
+		} catch (Exception e) {
+			System.out.println("Sucedio un error al obtener la cantidad de categorias: "+ e);
+		}
+		
+		
+		return total;
+	}
 }

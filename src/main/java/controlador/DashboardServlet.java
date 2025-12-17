@@ -5,13 +5,16 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import modeloDAO.CategoriaDAO;
 import modeloDAO.ClienteDAO;
 import modeloDAO.CompraDetalleDAO;
 import modeloDAO.ComprasDAO;
 import modeloDAO.LibrosDAO;
 import modeloDAO.ProveedorDAO;
+import modeloDAO.UsuarioDAO;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 /**
  * Servlet implementation class DashboardServlet
@@ -40,22 +43,33 @@ public class DashboardServlet extends HttpServlet {
 		
 		if("inicio".equalsIgnoreCase(view)) {
 			
+			UsuarioDAO usuarioDAO = new UsuarioDAO();
 			ClienteDAO clientesDAO = new ClienteDAO();
+			CategoriaDAO categoriaGAO = new CategoriaDAO();
 			LibrosDAO librosDAO = new LibrosDAO();
 			ProveedorDAO proveedoresDAO = new ProveedorDAO();
+			ComprasDAO comprasDAO = new ComprasDAO();
 			
+			int totalUsuarios = usuarioDAO.count();
 			int totalClientes = clientesDAO.count();
+			int totalCategorias = categoriaGAO.count();
 			int totalLibros = librosDAO.count();
 			int stockTotal = librosDAO.totalStock();
 			int totalProveedores = proveedoresDAO.count();
+			int totalComprasRegis = comprasDAO.count();
+			BigDecimal totalImporteCompra = comprasDAO.sumaTotalCompras();
 			
-			
+			request.setAttribute("totalUsuarios", totalUsuarios);
 			request.setAttribute("totalClientes", totalClientes);
+			request.setAttribute("totalCategorias", totalCategorias);
 			request.setAttribute("totalLibros", totalLibros);
 			request.setAttribute("stockTotal", stockTotal);
 			request.setAttribute("totalProveedores", totalProveedores);
+			request.setAttribute("comprasRegistradas", totalComprasRegis);
+			request.setAttribute("importeTotalCompras", totalImporteCompra);
 			
 		}
+		
 		request.setAttribute("view", view);
 
         request.getRequestDispatcher("/layout/dashboard.jsp").forward(request, response);
