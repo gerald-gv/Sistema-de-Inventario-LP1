@@ -26,9 +26,13 @@ List<Proveedor> listaProveedores = proveedorDAO.listar();
 			class="px-3 py-2 border rounded-lg w-60 focus:outline-none"
 			onkeyup="filtrarTabla()">
 
-		<button onclick="abrirModalAgregar()"
-			class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-			+ Nueva Compra</button>
+		<button onclick="abrirModalAgregar()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+			+ Nueva Compra
+		</button>
+		<button onclick="generarExcelGeneral()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+			Generar Excel General
+		</button>
+			
 	</div>
 </div>
 
@@ -176,6 +180,10 @@ List<Proveedor> listaProveedores = proveedorDAO.listar();
 		<div id="contenidoDetalle">Cargando...</div>
 
 		<div class="text-right mt-4">
+			<button id="btnGenerarExcel" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
+		        Generar Excel
+   			 </button>
+		
 			<button onclick="cerrarModalDetalle()"
 				class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">
 				Cerrar</button>
@@ -316,6 +324,13 @@ function verDetalle(idCompra) {
         })
         .then(function(html) {
             document.getElementById('contenidoDetalle').innerHTML = html;
+            
+            const btnExcel = document.getElementById("btnGenerarExcel");
+            // Al escuhcar el evento, se ejecutara una funcion, a la cual llamara a la funcion generarExcel
+            btnExcel.onclick = function(){
+            	generarExcel(idCompra);
+            } 
+            
             const modal = document.getElementById('modalDetalle');
             modal.classList.remove('hidden');
         })
@@ -381,5 +396,19 @@ function eliminarCompra(id) {
         window.location.href =
             "ControladorCompras?accion=eliminar&id=" + id;
     }
+}
+
+// Generar Excel por compra
+
+function generarExcel(idCompra) {
+    // Redirigir al controlador ExportarCompra
+	window.location.href = '<%=request.getContextPath()%>/ExportarCompra?id=' + idCompra;
+}
+
+// Generar Excel General
+function generarExcelGeneral() {
+    alert("Se está generando el Excel de compras, espere unos segundos...");
+
+    window.location.href = '<%=request.getContextPath()%>/ExportarComprasGenerales';
 }
 </script>
