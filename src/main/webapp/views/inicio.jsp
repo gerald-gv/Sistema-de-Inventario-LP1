@@ -5,7 +5,7 @@ Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
 String rol = usuario.getRol() != null ? usuario.getRol().getNombre() : " ";
 %>
 
-
+<jsp:include page="/layout/Animacion.jsp"/>
 <div class="mb-12">
 
 	<h1 class="text-2xl font-bold text-slate-800">Dashboard</h1>
