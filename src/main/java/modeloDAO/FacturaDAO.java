@@ -12,6 +12,7 @@ import config.Conexion;
 import interfaz.CRUD;
 import modelo.Cliente;
 import modelo.Factura;
+import modelo.Usuario;
 
 public class FacturaDAO implements CRUD<Factura> {
 
@@ -24,11 +25,12 @@ public class FacturaDAO implements CRUD<Factura> {
 		List<Factura> lista = new ArrayList<Factura>();
 
 		String sql = """
-					SELECT * FROM ventas v
-					JOIN clientes c
-					ON c.id_cliente = v.id_cliente
-					 ORDER BY v.id_venta ASC
-				""";
+				SELECT *
+FROM ventas v
+JOIN clientes c ON c.id_cliente = v.id_cliente
+LEFT JOIN usuarios u ON u.id_usuario = v.id_usuario
+ORDER BY v.id_venta ASC
+								""";
 
 		try {
 			cnx = Conexion.Conectar();
@@ -36,16 +38,30 @@ public class FacturaDAO implements CRUD<Factura> {
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
-				Factura factura = new Factura();
+			    Factura factura = new Factura();
 
-				factura.setId(rs.getInt("id_venta"));
-				factura.setCliente(new Cliente(rs.getInt("id_cliente"), rs.getString("nombre_negocio"),
-						rs.getString("customer_email"), rs.getString("customer_contact"), rs.getString("direccion"),
-						rs.getString("tipo_cliente")));
-				factura.setTotal(rs.getDouble("total_venta"));
-				factura.setFecha(rs.getDate("fecha_venta").toLocalDate());
+			    factura.setId(rs.getInt("id_venta"));
+			    factura.setTotal(rs.getDouble("total_venta"));
+			    factura.setFecha(rs.getDate("fecha_venta").toLocalDate());
 
-				lista.add(factura);
+			    // ESTO PARA EL CLIENTE
+			    factura.setCliente(new Cliente(
+			        rs.getInt("id_cliente"),
+			        rs.getString("nombre_negocio"),
+			        rs.getString("customer_email"),
+			        rs.getString("customer_contact"),
+			        rs.getString("direccion"),
+			        rs.getString("tipo_cliente")
+			    ));
+
+			    // USUARIO
+			    Usuario usuario = new Usuario();
+			    usuario.setId(rs.getInt("id_usuario"));
+			    usuario.setUsername(rs.getString("username"));
+
+			    factura.setUsuario(usuario);
+
+			    lista.add(factura);
 			}
 		} catch (Exception e) {
 			System.out.println("Error al listar las facturas: " + e.getMessage());
@@ -56,7 +72,8 @@ public class FacturaDAO implements CRUD<Factura> {
 
 		return lista;
 	}
-	//METODO PARA OBTENER LOS DETALLES
+
+	// METODO PARA OBTENER LOS DETALLES
 	public List<DetalleVenta> obtenerDetallesFactura(int idFactura) {
 		List<DetalleVenta> detalles = new ArrayList<>();
 
@@ -74,8 +91,6 @@ public class FacturaDAO implements CRUD<Factura> {
 			ps.setInt(1, idFactura);
 			rs = ps.executeQuery();
 
-			System.out.println("=== Buscando detalles para factura #" + idFactura + " ===");
-
 			while (rs.next()) {
 				DetalleVenta detalle = new DetalleVenta();
 				detalle.setIdDetalle(rs.getInt("id_detalle"));
@@ -88,13 +103,9 @@ public class FacturaDAO implements CRUD<Factura> {
 				detalle.setPrecioUnitario(rs.getDouble("precio_uni_venta"));
 				detalle.setSubtotal(rs.getInt("cantidad") * rs.getDouble("precio_uni_venta"));
 
-				System.out.println(
-						"  Detalle encontrado: " + detalle.getTituloLibro() + " - Cant: " + detalle.getCantidad());
 
 				detalles.add(detalle);
 			}
-
-			System.out.println("Total detalles encontrados: " + detalles.size());
 
 		} catch (Exception e) {
 			System.out.println("Error al obtener detalles de factura: " + e.getMessage());
@@ -106,7 +117,7 @@ public class FacturaDAO implements CRUD<Factura> {
 		return detalles;
 	}
 
-	public int crearFactura(int idCliente, LocalDate fecha, String[] idLibros, String[] cantidades, String[] precios) {
+	public int crearFactura(int idCliente, int idUsuario,LocalDate fecha, String[] idLibros, String[] cantidades, String[] precios) {
 
 		int idFactura = 0;
 
@@ -126,12 +137,14 @@ public class FacturaDAO implements CRUD<Factura> {
 			}
 
 			// INSERTAMOS LA VENTA GAAA
-			String sqlVenta = "INSERT INTO ventas (id_cliente, fecha_venta, total_venta) VALUES (?, ?, ?)";
+			String sqlVenta = "INSERT INTO ventas (id_cliente, id_usuario, fecha_venta, total_venta)\r\n"
+					+ "    VALUES (?, ?, ?, ?)";
 
 			ps = cnx.prepareStatement(sqlVenta, Statement.RETURN_GENERATED_KEYS);
 			ps.setInt(1, idCliente);
-			ps.setDate(2, java.sql.Date.valueOf(fecha));
-			ps.setDouble(3, totalVenta);
+			ps.setInt(2, idUsuario);
+			ps.setDate(3, java.sql.Date.valueOf(fecha));
+			ps.setDouble(4, totalVenta);
 			ps.executeUpdate();
 
 			// OBTENER ID GENERADO
@@ -158,7 +171,6 @@ public class FacturaDAO implements CRUD<Factura> {
 			}
 
 			ps.executeBatch();
-
 
 			cnx.commit();
 
@@ -217,13 +229,14 @@ public class FacturaDAO implements CRUD<Factura> {
 
 	@Override
 	public boolean add(Factura f) {
-		String sql = "INSERT INTO ventas (id_cliente, fecha_venta, total_venta) VALUES (?, ?, ?)";
+		String sql = "INSERT INTO ventas (id_cliente, id_usuario, fecha_venta, total_venta) VALUES (?, ?, ?, ?)";
 		try {
 			cnx = Conexion.Conectar();
 			ps = cnx.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			ps.setInt(1, f.getCliente().getId());
-			ps.setDate(2, java.sql.Date.valueOf(f.getFecha()));
-			ps.setDouble(3, f.getTotal());
+			ps.setInt(2, f.getUsuario().getId());
+			ps.setDate(3, java.sql.Date.valueOf(f.getFecha()));
+			ps.setDouble(4, f.getTotal());
 			int filas = ps.executeUpdate();
 
 			if (filas > 0) {
@@ -284,5 +297,94 @@ public class FacturaDAO implements CRUD<Factura> {
 
 		return eliminado;
 	}
+	public Factura obtenerInfoFactura(int idFactura) {
+	    Factura factura = null;
 
+	    String sqlFactura = """
+	        SELECT v.id_venta, v.fecha_venta,
+	               u.id_usuario, u.username AS vendedor,
+	               c.id_cliente, c.nombre_negocio AS cliente, c.tipo_cliente,
+	               c.customer_email AS email, c.customer_contact AS telefono
+	        FROM ventas v
+	        LEFT JOIN usuarios u ON u.id_usuario = v.id_usuario
+	        JOIN clientes c ON c.id_cliente = v.id_cliente
+	        WHERE v.id_venta = ?
+	    """;
+
+	    try {
+	        cnx = Conexion.Conectar();
+	        ps = cnx.prepareStatement(sqlFactura);
+	        ps.setInt(1, idFactura);
+	        rs = ps.executeQuery();
+
+	        if (rs.next()) {
+	            
+	            Usuario usuario = new Usuario();
+	            usuario.setId(rs.getInt("id_usuario"));
+	            usuario.setUsername(rs.getString("vendedor"));
+
+	            Cliente cliente = new Cliente();
+	            cliente.setId(rs.getInt("id_cliente"));
+	            cliente.setNombreNegocio(rs.getString("cliente"));
+	            cliente.setTipoCliente(rs.getString("tipo_cliente"));
+	            cliente.setEmail(rs.getString("email"));
+	            cliente.setContacto(rs.getString("telefono"));
+
+	            factura = new Factura();
+	            factura.setId(rs.getInt("id_venta"));
+	            factura.setFecha(rs.getDate("fecha_venta").toLocalDate());
+	            factura.setUsuario(usuario);
+	            factura.setCliente(cliente);
+	            
+	        }
+
+	        // Obtener los detalles
+	        String sqlDetalles = """
+	            SELECT vd.id_detalle, vd.id_libro, l.titulo AS tituloLibro, l.autor, l.editorial,
+	                   vd.cantidad, vd.precio AS precioUnitario, (vd.cantidad * vd.precio) AS subtotal
+	            FROM ventas_detalle vd
+	            JOIN libros l ON l.id_libro = vd.id_libro
+	            WHERE vd.id_venta = ?
+	            ORDER BY vd.id_detalle
+	        """;
+
+	        ps = cnx.prepareStatement(sqlDetalles);
+	        ps.setInt(1, idFactura);
+	        rs = ps.executeQuery();
+
+	        List<DetalleVenta> detalles = new ArrayList<>();
+	        while (rs.next()) {
+	            DetalleVenta detalle = new DetalleVenta();
+	            detalle.setIdDetalle(rs.getInt("id_detalle"));
+	            detalle.setIdVenta(idFactura);
+	            detalle.setIdLibro(rs.getInt("id_libro"));
+	            detalle.setTituloLibro(rs.getString("tituloLibro"));
+	            detalle.setAutor(rs.getString("autor"));
+	            detalle.setEditorial(rs.getString("editorial"));
+	            detalle.setCantidad(rs.getInt("cantidad"));
+	            detalle.setPrecioUnitario(rs.getDouble("precioUnitario"));
+	            detalle.setSubtotal(rs.getDouble("subtotal"));
+
+	            detalles.add(detalle);
+	        }
+	       
+
+	        // ASIGNAR DETALLES Y TOTAL DENTRO DEL TRY
+	        if (factura != null) {
+	            factura.setDetalles(detalles);
+	            factura.setTotal(detalles.stream().mapToDouble(DetalleVenta::getSubtotal).sum());
+	        } else {
+	            System.out.println("LA FACTURA ESTA VACIA");
+	        }
+
+	    } catch (Exception e) {
+	        System.out.println("NO SE PUEDO ENCONTRAR obtenerInfoFactura:");
+	        e.printStackTrace();
+	    } finally {
+	        cerrarRecursos();
+	    }
+
+	    
+	    return factura;
+	}
 }

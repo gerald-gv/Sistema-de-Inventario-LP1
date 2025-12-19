@@ -34,6 +34,7 @@ List<Factura> lista = dao.listar();
 		<thead class="bg-gray-200 text-gray-700 uppercase text-xs">
 			<tr>
 				<th class="py-3 px-4">ID</th>
+				<th class="py-3 px-4">Usuario</th>
 				<th class="py-3 px-4">Fecha</th>
 				<th class="py-3 px-4">Cliente</th>
 				<th class="py-3 px-4">Monto Total</th>
@@ -53,6 +54,9 @@ List<Factura> lista = dao.listar();
 			%>
 			<tr class="border-b hover:bg-gray-50">
 				<td class="py-2 px-4"><%=f.getId()%></td>
+				<td class="py-2 px-4">
+    			<%= f.getUsuario() != null ? f.getUsuario().getUsername() : "—" %>
+				</td>
 				<td class="py-2 px-4"><%=f.getFecha()%></td>
 				<td class="py-2 px-4"><%=f.getCliente().getNombreNegocio()%></td>
 				<td class="py-2 px-4">S/ <%=String.format("%.2f", f.getTotal())%></td>

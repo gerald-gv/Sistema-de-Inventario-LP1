@@ -9,7 +9,6 @@ import modelo.Cliente;
 import modelo.Factura;
 import modeloDAO.CategoriaDAO;
 import modeloDAO.ClienteDAO;
-import modeloDAO.CompraDetalleDAO;
 import modeloDAO.ComprasDAO;
 import modeloDAO.FacturaDAO;
 import modeloDAO.LibrosDAO;
