@@ -5,16 +5,20 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import modelo.Cliente;
+import modelo.Factura;
 import modeloDAO.CategoriaDAO;
 import modeloDAO.ClienteDAO;
 import modeloDAO.CompraDetalleDAO;
 import modeloDAO.ComprasDAO;
+import modeloDAO.FacturaDAO;
 import modeloDAO.LibrosDAO;
 import modeloDAO.ProveedorDAO;
 import modeloDAO.UsuarioDAO;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Servlet implementation class DashboardServlet
@@ -67,12 +71,23 @@ public class DashboardServlet extends HttpServlet {
 			request.setAttribute("totalProveedores", totalProveedores);
 			request.setAttribute("comprasRegistradas", totalComprasRegis);
 			request.setAttribute("importeTotalCompras", totalImporteCompra);
-			
-		}
-		
-		request.setAttribute("view", view);
+			//AGREGUE ESTE CODIGO PARA QUE FUNCIONE VENTAS, NO SE PORQUE NO FUNCIONA SIN ESTO Y LAS DEMAS VISTAS SI XD
+		}else if ("ventaAdd".equalsIgnoreCase(view)) {
 
-        request.getRequestDispatcher("/layout/dashboard.jsp").forward(request, response);
+	        ClienteDAO clienteDAO = new ClienteDAO();
+	        List<Cliente> clientes = clienteDAO.listar();
+	        request.setAttribute("clientes", clientes);
+
+	    } else if ("venta".equalsIgnoreCase(view)) {
+
+	        FacturaDAO facturaDAO = new FacturaDAO();
+	        List<Factura> ventas = facturaDAO.listar();
+	        request.setAttribute("ventas", ventas);
+	    }
+
+	    request.setAttribute("view", view);
+	    request.getRequestDispatcher("/layout/dashboard.jsp")
+	           .forward(request, response);
 	}
 
 	
