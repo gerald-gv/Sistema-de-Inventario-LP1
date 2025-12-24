@@ -52,6 +52,7 @@ public class DashboardServlet extends HttpServlet {
 			LibrosDAO librosDAO = new LibrosDAO();
 			ProveedorDAO proveedoresDAO = new ProveedorDAO();
 			ComprasDAO comprasDAO = new ComprasDAO();
+			FacturaDAO ventasDAO = new FacturaDAO();
 			
 			int totalUsuarios = usuarioDAO.count();
 			int totalClientes = clientesDAO.count();
@@ -60,7 +61,9 @@ public class DashboardServlet extends HttpServlet {
 			int stockTotal = librosDAO.totalStock();
 			int totalProveedores = proveedoresDAO.count();
 			int totalComprasRegis = comprasDAO.count();
+			int totalVentasRegis = ventasDAO.count();
 			BigDecimal totalImporteCompra = comprasDAO.sumaTotalCompras();
+			BigDecimal totalImporteVenta = ventasDAO.sumaTotalVentas();
 			
 			request.setAttribute("totalUsuarios", totalUsuarios);
 			request.setAttribute("totalClientes", totalClientes);
@@ -69,8 +72,10 @@ public class DashboardServlet extends HttpServlet {
 			request.setAttribute("stockTotal", stockTotal);
 			request.setAttribute("totalProveedores", totalProveedores);
 			request.setAttribute("comprasRegistradas", totalComprasRegis);
+			request.setAttribute("ventasRegistradas", totalVentasRegis);
 			request.setAttribute("importeTotalCompras", totalImporteCompra);
-			//AGREGUE ESTE CODIGO PARA QUE FUNCIONE VENTAS, NO SE PORQUE NO FUNCIONA SIN ESTO Y LAS DEMAS VISTAS SI XD
+			request.setAttribute("importeTotalVentas", totalImporteVenta);
+			
 		}else if ("ventaAdd".equalsIgnoreCase(view)) {
 
 	        ClienteDAO clienteDAO = new ClienteDAO();
@@ -85,8 +90,7 @@ public class DashboardServlet extends HttpServlet {
 	    }
 
 	    request.setAttribute("view", view);
-	    request.getRequestDispatcher("/layout/dashboard.jsp")
-	           .forward(request, response);
+	    request.getRequestDispatcher("/layout/dashboard.jsp").forward(request, response);
 	}
 
 	

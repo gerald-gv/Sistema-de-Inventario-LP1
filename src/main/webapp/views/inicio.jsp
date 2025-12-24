@@ -132,7 +132,7 @@ String rol = usuario.getRol() != null ? usuario.getRol().getNombre() : " ";
 	    <div class="flex items-center justify-between">
 	        <div>
 	            <p class="text-sm text-slate-500 uppercase">Total Ventas</p>
-	            <h2 class="text-3xl font-bold text-slate-800">8</h2>
+	            <h2 class="text-3xl font-bold text-slate-800">${ventasRegistradas}</h2>
 	        </div>
 	
 	        <div class="w-14 h-14 flex items-center justify-center rounded-lg bg-blue-100 text-blue-600 text-3xl">
@@ -161,7 +161,7 @@ String rol = usuario.getRol() != null ? usuario.getRol().getNombre() : " ";
 	    <div class="flex items-center justify-between">
 	        <div>
 	            <p class="text-sm text-slate-500 uppercase">Importe de Ventas</p>
-	            <h2 class="text-3xl font-bold text-slate-800"> 50</h2>
+	            <h2 class="text-3xl font-bold text-slate-800">${importeTotalVentas}</h2>
 	        </div>
 	
 	        <div

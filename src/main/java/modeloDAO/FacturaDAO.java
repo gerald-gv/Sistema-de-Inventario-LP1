@@ -1,8 +1,10 @@
 package modeloDAO;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -10,11 +12,12 @@ import java.util.List;
 import modelo.DetalleVenta;
 import config.Conexion;
 import interfaz.CRUD;
+import interfaz.CountMetrics;
 import modelo.Cliente;
 import modelo.Factura;
 import modelo.Usuario;
 
-public class FacturaDAO implements CRUD<Factura> {
+public class FacturaDAO implements CRUD<Factura>, CountMetrics {
 
 	Connection cnx;
 	PreparedStatement ps;
@@ -386,5 +389,47 @@ ORDER BY v.id_venta ASC
 
 	    
 	    return factura;
+	}
+
+	@Override
+	public int count() {
+		int total = 0;
+		
+		String sql = "SELECT COUNT(*) FROM ventas";
+		try {
+			cnx = Conexion.Conectar();
+			ps = cnx.prepareStatement(sql);
+			rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				total = rs.getInt(1);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("Sucedio un error al obtener la cantidad de la entidad ventas: "+ e);
+		}
+		
+		
+		return total;
+	}
+	
+	public BigDecimal sumaTotalVentas() {
+		BigDecimal sumaTotal = BigDecimal.ZERO;
+		String sql = "SELECT SUM(total_venta) FROM ventas";
+		
+		try {
+			cnx = Conexion.Conectar();
+			ps = cnx.prepareStatement(sql);
+			rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				sumaTotal = rs.getBigDecimal(1);
+			}
+			
+		} catch(SQLException e) {
+			System.out.println("Sucedio un error al intentar obtener el importe total de venta "+ e);
+		}
+		
+		return sumaTotal;
 	}
 }
