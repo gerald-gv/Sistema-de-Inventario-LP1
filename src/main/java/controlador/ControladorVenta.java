@@ -12,6 +12,7 @@ import modelo.Factura;
 import modelo.Usuario;
 import modeloDAO.ClienteDAO;
 import modeloDAO.FacturaDAO;
+import modeloDAO.LibrosDAO;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -90,14 +91,42 @@ public class ControladorVenta extends HttpServlet {
                 return;
             }
 
+         // VALIDAR STOCK ANTES DE GUARDAR
+            LibrosDAO librosDAO = new LibrosDAO();
+
+            for (int i = 0; i < idLibros.length; i++) {
+                int idLibro = Integer.parseInt(idLibros[i]);
+                int cantidad = Integer.parseInt(cantidades[i]);
+
+                int stockActual = librosDAO.obtenerStock(idLibro);
+
+                if (stockActual < cantidad) {
+                    response.sendRedirect(
+                        request.getContextPath() + "/DashboardServlet?view=ventaAdd&error=stockInsuficiente"
+                    );
+                    return;
+                }
+            }
+
+            // SI LLEGÓ AQUÍ → TODO OK → CREAR FACTURA
             FacturaDAO facturaDAO = new FacturaDAO();
             int facturaId = facturaDAO.crearFactura(
                 idCliente, idUsuario, fecha, idLibros, cantidades, precios
             );
 
+            // AHORA SÍ DESCONTAR STOCK
+            for (int i = 0; i < idLibros.length; i++) {
+                int idLibro = Integer.parseInt(idLibros[i]);
+                int cantidad = Integer.parseInt(cantidades[i]);
+
+                int stockActual = librosDAO.obtenerStock(idLibro);
+                int nuevoStock = stockActual - cantidad;
+                librosDAO.actualizarStock(idLibro, nuevoStock);
+            }
+            //FINAL DE ACTUALIZAR STOCK
             Factura factura = facturaDAO.obtenerInfoFactura(facturaId); // ahora devuelve Factura completa
 
-            FacturaPDF.generar(factura, response); // genera PDF con toda la info
+            response.sendRedirect(request.getContextPath() + "/DashboardServlet?view=venta");
             return;
         }
     }

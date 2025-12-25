@@ -215,8 +215,43 @@ public class LibrosDAO implements CRUD<Libros>, CountMetrics {
 		} catch (Exception e) {
 			System.out.println("Sucedio un error al obtener la cantidad de Stock de la entidad libros: "+ e);
 		}
-		
-		
 		return total;
+	}
+	public int obtenerStock(int idLibro) {
+	    int stock = 0;
+	    String sql = "SELECT stock FROM libros WHERE id_libro = ?";
+
+	    try (Connection con = Conexion.Conectar();
+	         PreparedStatement ps = con.prepareStatement(sql)) {
+
+	        ps.setInt(1, idLibro);
+	        ResultSet rs = ps.executeQuery();
+
+	        if (rs.next()) {
+	            stock = rs.getInt("stock");
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return stock;
+	}
+	
+	public boolean actualizarStock(int idLibro, int nuevoStock) {
+	    String sql = "UPDATE libros SET stock = ? WHERE id_libro = ?";
+
+	    try (Connection con = Conexion.Conectar();
+	         PreparedStatement ps = con.prepareStatement(sql)) {
+
+	        ps.setInt(1, nuevoStock);
+	        ps.setInt(2, idLibro);
+
+	        return ps.executeUpdate() > 0;
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return false;
+	    }
 	}
 }
