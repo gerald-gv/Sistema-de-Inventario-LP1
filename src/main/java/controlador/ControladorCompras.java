@@ -17,6 +17,7 @@ import modelo.Usuario;
 import modelo.Libros;
 
 import modeloDAO.ComprasDAO;
+import modeloDAO.LibrosDAO;
 import modeloDAO.CompraDetalleDAO;
 
 @WebServlet("/ControladorCompras")
@@ -117,6 +118,15 @@ public class ControladorCompras extends HttpServlet {
                     detalle.setPrecioUniCompra(new BigDecimal(preciosCompra[i]));
 
                     detalleDAO.add(detalle);
+                    //PARTE PARA ACTUALIZAR STOCK
+                    detalleDAO.add(detalle);
+
+                    LibrosDAO librosDAO = new LibrosDAO();
+                    int idLibro = detalle.getLibro().getIdLibro();
+                    int cantidad = detalle.getCantidad();
+
+                    int stockActual = librosDAO.obtenerStock(idLibro);
+                    librosDAO.actualizarStock(idLibro, stockActual + cantidad);
                 }
             }
 
