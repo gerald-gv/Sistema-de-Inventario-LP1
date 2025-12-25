@@ -146,7 +146,7 @@ String rol = usuario.getRol() != null ? usuario.getRol().getNombre() : " ";
 		<div class="flex items-center justify-between">
 			<div>
 				<p class="text-sm text-slate-500 uppercase">Importe de Compras</p>
-				<h2 class="text-3xl font-bold text-slate-800">${importeTotalCompras}</h2>
+				<h2 class="text-3xl font-bold text-slate-800">S/ ${importeTotalCompras}</h2>
 			</div>
 
 			<div
@@ -161,7 +161,7 @@ String rol = usuario.getRol() != null ? usuario.getRol().getNombre() : " ";
 	    <div class="flex items-center justify-between">
 	        <div>
 	            <p class="text-sm text-slate-500 uppercase">Importe de Ventas</p>
-	            <h2 class="text-3xl font-bold text-slate-800">${importeTotalVentas}</h2>
+	            <h2 class="text-3xl font-bold text-slate-800">S/ ${importeTotalVentas}</h2>
 	        </div>
 	
 	        <div
@@ -171,17 +171,19 @@ String rol = usuario.getRol() != null ? usuario.getRol().getNombre() : " ";
 	    </div>
 	</div>
 	
-	<!-- Ganancia -->
-	<div class="bg-white border-l-4 border-emerald-600 rounded-xl shadow-sm p-5 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+	<!-- Ganancia / Pérdida -->
+	<div class="bg-white border-l-4 ${colorBorde} rounded-xl shadow-sm p-5 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+	
 	    <div class="flex items-center justify-between">
 	        <div>
-	            <p class="text-sm text-slate-500 uppercase">Ganancia</p>
-	            <h2 class="text-3xl font-bold text-slate-800">30</h2>
+	            <p class="text-sm text-slate-500 uppercase">${tipoResultado}</p>
+	            <h2 class="text-3xl font-bold ${colorTexto}">S/ ${resultado}</h2>
 	        </div>
 	
-	        <div class="w-14 h-14 flex items-center justify-center rounded-lg bg-emerald-100 text-emerald-700 text-3xl">
-	            <i class="fa-solid fa-arrow-trend-up"></i>
+	        <div class="w-14 h-14 flex items-center justify-center rounded-lg ${bgIcono} text-3xl">
+	            <i class="fa-solid ${icono}"></i>
 	        </div>
+	        
 	    </div>
 	</div>
 </section>

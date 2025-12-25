@@ -44,6 +44,14 @@
     .nav-link.active {
         box-shadow: inset 3px 0 0 #38bdf8;
     }
+    
+    .nav-link.active.compras {
+    box-shadow: inset 3px 0 0 #f59e0b;
+	}
+
+	.nav-link.active.ventas {
+	    box-shadow: inset 3px 0 0 #10b981;
+	}
 </style>
 </head>
 
@@ -142,8 +150,8 @@
 	
 	        <a id="linkCompras" href="<%= request.getContextPath() %>/DashboardServlet?view=compras"
 	           class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg
-	           <%= "compra".equals(view)
-	                ? "active bg-sky-600 text-white font-medium"
+	           <%= "compras".equals(view)
+	                ? "active compras bg-orange-600 text-white font-medium"
 	                : "text-slate-300 hover:bg-slate-700 hover:text-white" %>">
 	            <i class="fa-solid fa-cart-shopping w-4 text-center"></i>
 	            <span>Compra</span>
@@ -152,7 +160,7 @@
 	        <a id="linkVentas" href="<%= request.getContextPath() %>/DashboardServlet?view=venta"
 	           class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg
 	           <%= "venta".equals(view)
-	                ? "active bg-sky-600 text-white font-medium"
+	                ? "active ventas bg-green-600 text-white font-medium"
 	                : "text-slate-300 hover:bg-slate-700 hover:text-white" %>">
 	            <i class="fa-solid fa-cash-register w-4 text-center"></i>
 	            <span>Venta</span>

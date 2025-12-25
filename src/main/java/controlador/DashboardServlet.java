@@ -76,6 +76,20 @@ public class DashboardServlet extends HttpServlet {
 			request.setAttribute("importeTotalCompras", totalImporteCompra);
 			request.setAttribute("importeTotalVentas", totalImporteVenta);
 			
+			// Calculo de Ganancia o Perdida
+			BigDecimal resultado = totalImporteVenta.subtract(totalImporteCompra);
+			
+			// Obtener el estado
+			boolean esGanancia = resultado.compareTo(BigDecimal.ZERO) >= 0;
+			
+			// Se establece los atributos para las vistas
+			request.setAttribute("resultado", resultado);
+			request.setAttribute("tipoResultado", esGanancia ? "Ganancia" : "Pérdida");
+			request.setAttribute("colorBorde", esGanancia ? "border-emerald-600" : "border-red-600");
+			request.setAttribute("colorTexto", esGanancia ? "text-emerald-700" : "text-red-700");
+			request.setAttribute("bgIcono", esGanancia ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700");
+			request.setAttribute("icono", esGanancia ? "fa-arrow-trend-up" : "fa-arrow-trend-down");
+			
 		}else if ("ventaAdd".equalsIgnoreCase(view)) {
 
 	        ClienteDAO clienteDAO = new ClienteDAO();
