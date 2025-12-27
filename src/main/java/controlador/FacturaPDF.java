@@ -24,15 +24,15 @@ public class FacturaPDF {
 	    PDPageContentStream content = new PDPageContentStream(document, page);
 
 	    // ===== FONDO DE CABECERA =====
-	    content.setNonStrokingColor(new Color(230, 230, 250)); // lavanda claro
+	    content.setNonStrokingColor(new Color(230, 230, 250)); 
 	    content.addRect(0, 750, page.getMediaBox().getWidth(), 80);
 	    content.fill();
 
 	    // ===== TÍTULO =====
 	    content.beginText();
-	    content.setNonStrokingColor(Color.BLACK); // negro para mejor contraste
+	    content.setNonStrokingColor(Color.BLACK);
 	    content.setFont(fontBold, 24);
-	    content.newLineAtOffset(50, 770); // subimos un poco para que quede centrado en la cabecera
+	    content.newLineAtOffset(50, 770);
 	    content.showText("FACTURA");
 	    content.endText();
 
@@ -52,10 +52,10 @@ public class FacturaPDF {
 	    content.endText();
 
 	    // ===== DATOS DEL CLIENTE Y VENDEDOR =====
-	    float yStart = 710; // bajamos el inicio para que quede dentro del cuadro
+	    float yStart = 710; 
 	    content.setStrokingColor(Color.BLACK);
 	    content.setLineWidth(0.5f);
-	    content.addRect(45, yStart - 70, 500, 80); // aumentamos altura del cuadro
+	    content.addRect(45, yStart - 70, 500, 80);
 	    content.stroke();
 
 	    content.beginText();
@@ -75,7 +75,7 @@ public class FacturaPDF {
 
 	    // ===== ENCABEZADO DE DETALLES =====
 	    float y = yStart - 100;
-	    content.setNonStrokingColor(200f/255, 200f/255, 200f/255); // gris claro
+	    content.setNonStrokingColor(200f/255, 200f/255, 200f/255);
 	    content.addRect(50, y, 500, 20);
 	    content.fill();
 
