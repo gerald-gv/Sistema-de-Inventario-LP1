@@ -27,6 +27,7 @@ public class CompraDetalleDAO {
                 FROM compra_detalle d
                 JOIN libros l ON d.id_libro = l.id_libro
                 WHERE d.id_compra = ?
+                ORDER BY d.id_detalle ASC
                 """;
 
         try (Connection con = Conexion.Conectar();

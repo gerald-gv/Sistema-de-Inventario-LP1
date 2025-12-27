@@ -24,6 +24,7 @@ public class ComprasDAO implements CRUD<Compras>, CountMetrics {
             FROM compras c
             JOIN proveedores p ON c.id_proveedor = p.id_proveedor
             JOIN usuarios u ON c.id_usuario = u.id_usuario
+            ORDER BY c.id_compra ASC
             """;
 
     private static final String SQL_BUSCAR_POR_ID = """

@@ -44,11 +44,7 @@ public class ControladorCompras extends HttpServlet {
         }
 
         // VER DETALLE DE COMPRA
-        if ("detalle".equals(accion)) {
-            int idCompra = Integer.parseInt(request.getParameter("id"));
-
-            response.sendRedirect(request.getContextPath()+ "/DashboardServlet?view=comprasDetalle&id=" + idCompra);
-        }else if ("modalDetalle".equals(accion)) {
+        if ("modalDetalle".equals(accion)) {
 
             int idCompra = Integer.parseInt(request.getParameter("id"));
 
@@ -117,7 +113,6 @@ public class ControladorCompras extends HttpServlet {
                     detalle.setCantidad(Integer.parseInt(cantidades[i]));
                     detalle.setPrecioUniCompra(new BigDecimal(preciosCompra[i]));
 
-                    detalleDAO.add(detalle);
                     //PARTE PARA ACTUALIZAR STOCK
                     detalleDAO.add(detalle);
 
@@ -129,39 +124,10 @@ public class ControladorCompras extends HttpServlet {
                     librosDAO.actualizarStock(idLibro, stockActual + cantidad);
                 }
             }
-
             // Actualizar total
             comprasDAO.actualizarTotal(idCompra);
 
             response.sendRedirect(request.getContextPath() + "/DashboardServlet?view=compras&id=" + idCompra);
-            return;
-        } else if ("agregarDetalle".equals(accion)) {
-
-            int idCompra = Integer.parseInt(request.getParameter("idCompra"));
-            int idLibro = Integer.parseInt(request.getParameter("libro"));
-            int cantidad = Integer.parseInt(request.getParameter("cantidad"));
-            BigDecimal precio = new BigDecimal(request.getParameter("precio"));
-
-            Compras compra = new Compras();
-            compra.setIdCompra(idCompra);
-
-            Libros libro = new Libros();
-            libro.setIdLibro(idLibro);
-
-            CompraDetalle detalle = new CompraDetalle();
-            detalle.setCompras(compra);
-            detalle.setLibro(libro);
-            detalle.setCantidad(cantidad);
-            detalle.setPrecioUniCompra(precio);
-
-            detalleDAO.add(detalle);
-
-            comprasDAO.actualizarTotal(idCompra);
-
-            response.sendRedirect(
-                request.getContextPath()
-                + "/DashboardServlet?view=comprasDetalle&id=" + idCompra
-            );
             return;
         }
     }

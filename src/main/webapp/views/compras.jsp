@@ -35,7 +35,6 @@ List<Proveedor> listaProveedores = proveedorDAO.listar();
 			
 	</div>
 </div>
-
 <div class="bg-white shadow-lg rounded-lg overflow-hidden">
 	<table class="min-w-full text-left text-sm">
 		<thead class="bg-gray-200 text-gray-700 uppercase text-xs">
@@ -77,7 +76,6 @@ List<Proveedor> listaProveedores = proveedorDAO.listar();
 		</tbody>
 	</table>
 </div>
-
 <!-- MODAL REGISTRAR COMPRA -->
 <div id="modalCompra"
 	class="fixed inset-0 bg-black bg-opacity-40 hidden justify-center items-center">
@@ -390,7 +388,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-//SCRIPT PARA ELIMINAR COMPRA -->
+//SCRIPT PARA ELIMINAR COMPRA
 function eliminarCompra(id) {
     if (confirm("¿Seguro que deseas eliminar esta compra?\nEsta acción no se puede deshacer.")) {
         window.location.href =
