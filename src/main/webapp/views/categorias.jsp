@@ -107,7 +107,7 @@
 
 <script>
     function abrirModalAgregar(){
-        document.getElementById("modalTitulo").innerText = "Agregar CategorÃ­a";
+        document.getElementById("modalTitulo").innerText = "Agregar Categoría";
         document.getElementById("accion").value = "guardar";
         document.getElementById("id").value = "";
         document.getElementById("formCategoria").reset();
@@ -115,7 +115,7 @@
     }
     
     function abrirModalEditar(id, nombre, descripcion){
-        document.getElementById("modalTitulo").innerText = "Editar CategorÃ­a";
+        document.getElementById("modalTitulo").innerText = "Editar Categoría";
         document.getElementById("accion").value = "actualizar";
         document.getElementById("id").value = id;
         document.getElementById("nombre").value = nombre;
